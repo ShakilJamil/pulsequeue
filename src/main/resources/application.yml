@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: pulsequeue
+  datasource:
+    url: jdbc:h2:mem:pulsequeue;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+# JWT Configuration
+jwt:
+  secret: c2hhazExampGZ1bGwtc3RhY2stcHVsLXNlY3JldC1rZXktamF2YTE3LXNwcmluZy1ib290LTIwMjY=
+  expirationMs: 86400000 # 24 hours
+
+# OpenAPI / Swagger
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+# Actuator Health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/pulsequeue_db}
+    username: ${SPRING_DATASOURCE_USERNAME:pulseuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:pulsepassword}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
+jwt:
+  secret: ${JWT_SECRET:c2hhazExampGZ1bGwtc3RhY2stcHVsLXNlY3JldC1rZXktamF2YTE3LXNwcmluZy1ib290LTIwMjY=}
+  expirationMs: 86400000

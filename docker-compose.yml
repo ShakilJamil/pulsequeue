@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  pulsequeue-db:
+    image: postgres:16-alpine
+    container_name: pulsequeue-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: pulsequeue_db
+      POSTGRES_USER: pulseuser
+      POSTGRES_PASSWORD: pulsepassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pulseuser -d pulsequeue_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pulsequeue-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pulsequeue-api
+    restart: always
+    depends_on:
+      pulsequeue-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://pulsequeue-db:5432/pulsequeue_db
+      SPRING_DATASOURCE_USERNAME: pulseuser
+      SPRING_DATASOURCE_PASSWORD: pulsepassword
+      JWT_SECRET: c2hhazExampGZ1bGwtc3RhY2stcHVsLXNlY3JldC1rZXktamF2YTE3LXNwcmluZy1ib290LTIwMjY=
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
